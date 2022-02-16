@@ -362,9 +362,6 @@ Matrix upper_triangular(const Matrix& matrix)
         if (row == col) {
             double temp {};
             Matrix M { matrix };
-            /*for (size_t i {}; i < row - 1; i++)
-                if (M[i][i] == 0)
-                    M = algebra::ero_swap(M, i, i + 1);*/
             for (size_t i {}; i < row; i++) {
                 if (M[i][i] == 0)
                     M = algebra::ero_swap(M, i, i + 1);
