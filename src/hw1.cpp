@@ -294,4 +294,88 @@ Matrix concatenate(const Matrix& matrix1, const Matrix& matrix2, int axis)
     }
 }
 
+Matrix ero_swap(const Matrix& matrix, size_t r1, size_t r2)
+{
+    if (matrix.empty()) {
+        throw std::logic_error("Matrix is empty");
+    } else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        if (r1 < row && r2 < row) {
+            Matrix temp(1, std::vector<double>(col));
+            Matrix M { matrix };
+            for (size_t j {}; j < col; j++) {
+                temp[0][j] = matrix[r2][j];
+                M[r2][j] = matrix[r1][j];
+                M[r1][j] = temp[0][j];
+            }
+            return M;
+        } else
+            throw std::logic_error("Invalid values for desired rows (Out of range)");
+    }
+}
+
+Matrix ero_multiply(const Matrix& matrix, size_t r, double c)
+{
+    if (matrix.empty()) {
+        throw std::logic_error("Matrix is empty");
+    } else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        if (r < row) {
+            Matrix M { matrix };
+            for (size_t j {}; j < col; j++)
+                M[r][j] = c * matrix[r][j];
+            return M;
+        } else
+            throw std::logic_error("Invalid values for desired row");
+    }
+}
+
+Matrix ero_sum(const Matrix& matrix, size_t r1, double c, size_t r2)
+{
+    if (matrix.empty()) {
+        throw std::logic_error("Matrix is empty");
+    } else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        if (r1 < row && r2 < row) {
+            Matrix temp(1, std::vector<double>(col));
+            Matrix M { matrix };
+            for (size_t j {}; j < col; j++)
+                M[r2][j] += c * matrix[r1][j];
+            return M;
+        } else
+            throw std::logic_error("Invalid values for desired rows");
+    }
+}
+
+Matrix upper_triangular(const Matrix& matrix)
+{
+
+    if (matrix.empty()) {
+        Matrix M {};
+        return M;
+    } else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        if (row == col) {
+            double temp {};
+            Matrix M { matrix };
+            /*for (size_t i {}; i < row - 1; i++)
+                if (M[i][i] == 0)
+                    M = algebra::ero_swap(M, i, i + 1);*/
+            for (size_t i {}; i < row; i++) {
+                if (M[i][i] == 0)
+                    M = algebra::ero_swap(M, i, i + 1);
+                for (size_t k { i + 1 }; k < row; k++) {
+                    temp = -(M[k][i] / M[i][i]);
+                    M = algebra::ero_sum(M, i, temp, k);
+                }
+            }
+            return M;
+        } else
+            throw std::logic_error("Matrix is not square");
+    }
+}
 }
