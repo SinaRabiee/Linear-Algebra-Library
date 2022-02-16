@@ -141,4 +141,157 @@ Matrix sum(const Matrix& matrix1, const Matrix& matrix2)
         }
     }
 }
+
+Matrix transpose(const Matrix& matrix)
+{
+    if (matrix.empty()) {
+        Matrix M {};
+        return M;
+    } else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        Matrix M(col, std::vector<double>(row));
+        for (size_t i {}; i < row; i++) {
+            for (size_t j {}; j < col; j++)
+                M[j][i] = matrix[i][j];
+        }
+        return M;
+    }
+}
+
+Matrix minor(const Matrix& matrix, size_t n, size_t m)
+{
+    if (matrix.empty()) {
+        throw std::logic_error("Matrix is empty");
+    } else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        if (n < row && m < col) {
+            double minor_row {};
+            double minor_col {};
+            Matrix temp(row, std::vector<double>(col));
+            Matrix M(row - 1, std::vector<double>(col - 1));
+
+            for (size_t i {}; i < row; i++) {
+                if (i != n) {
+                    for (size_t j {}; j < col; j++) {
+                        if (j != m) {
+                            temp[minor_row][minor_col] = matrix[i][j];
+                            minor_col++;
+                        }
+                    }
+                    minor_col = 0;
+                    minor_row++;
+                }
+            }
+            for (size_t i {}; i < row - 1; i++) {
+                for (size_t j {}; j < col - 1; j++)
+                    M[i][j] = temp[i][j];
+            }
+            return M;
+        } else
+            throw std::logic_error("Invalid minor size");
+    }
+}
+
+double determinant(const Matrix& matrix)
+{
+
+    if (matrix.empty())
+        return 1.0;
+    else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        double det {};
+        if (row == col) {
+            if (row == 1)
+                det = matrix[0][0];
+            else if (row == 2)
+                det = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1];
+            else {
+                for (size_t i {}; i < row; i++)
+                    det += pow(-1, i) * matrix[0][i] * determinant(minor(matrix, 0, i));
+            }
+            return det;
+        } else
+            throw std::logic_error("Matrix is not square");
+    }
+}
+
+Matrix inverse(const Matrix& matrix)
+{
+    if (matrix.empty()) {
+        Matrix M {};
+        return M;
+    } else {
+        double row { static_cast<double>(matrix.size()) };
+        double col { static_cast<double>(matrix[0].size()) };
+        if (row == col) {
+            if (determinant(matrix) == 0)
+                throw std::logic_error("Matrix is singular (Determinant = 0)");
+            else {
+                double det { determinant(matrix) };
+                Matrix M(row, std::vector<double>(col));
+                for (size_t i {}; i < row; i++) {
+                    for (size_t j {}; j < col; j++)
+                        M[i][j] = pow(-1, (i + j)) * determinant(minor(matrix, i, j));
+                }
+                M = multiply(transpose(M), 1 / det);
+                return M;
+            }
+        } else
+            throw std::logic_error("Matrix is not square");
+    }
+}
+
+Matrix concatenate(const Matrix& matrix1, const Matrix& matrix2, int axis)
+{
+    if (matrix1.empty() || matrix2.empty()) {
+        if (matrix1.empty() && matrix2.empty()) {
+            Matrix M {};
+            return M;
+        } else
+            throw std::logic_error("An empty matrix is is not concatable with a non-empty matirix");
+    } else {
+        double row1 { static_cast<double>(matrix1.size()) };
+        double col1 { static_cast<double>(matrix1[0].size()) };
+        double row2 { static_cast<double>(matrix2.size()) };
+        double col2 { static_cast<double>(matrix2[0].size()) };
+
+        if (axis == 0) {
+            if (col1 != col2) {
+                throw std::logic_error("columns of matrices don't match");
+            } else {
+                Matrix M(row1 + row2, std::vector<double>(col1));
+                for (size_t i {}; i < row1; i++) {
+                    for (size_t j {}; j < col1; j++)
+                        M[i][j] = matrix1[i][j];
+                }
+                for (size_t i {}; i < row2; i++) {
+                    for (size_t j {}; j < col2; j++)
+                        M[i + static_cast<size_t>(row1)][j] = matrix2[i][j];
+                }
+                return M;
+            }
+        } else if (axis == 1) {
+            if (row1 != row2) {
+                throw std::logic_error("rows of matrices don't match");
+            } else {
+                Matrix M(row1, std::vector<double>(col1 + col2));
+                for (size_t i {}; i < row1; i++) {
+                    for (size_t j {}; j < col1; j++)
+                        M[i][j] = matrix1[i][j];
+                }
+                for (size_t i {}; i < row2; i++) {
+                    for (size_t j {}; j < col2; j++)
+                        M[i][j + static_cast<size_t>(col1)] = matrix2[i][j];
+                }
+                return M;
+            }
+        } else {
+            throw std::logic_error("Inavalid axis value");
+        }
+    }
+}
+
 }
