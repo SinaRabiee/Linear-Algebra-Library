@@ -82,10 +82,14 @@ Matrix multiply(const Matrix& matrix1, const Matrix& matrix2)
     if (matrix1.empty() && matrix2.empty()) {
         Matrix M {};
         return M;
-    } else {
+    } else if (!matrix1.empty() && matrix2.empty())
+        throw std::logic_error("Matrix2 is empty and the other one is not");
+    else if (matrix1.empty() && !matrix2.empty())
+        throw std::logic_error("Matrix1 is empty and the other one is not");
+    else {
         double row1 { static_cast<double>(matrix1.size()) };
-        double col1 { static_cast<double>(matrix1[0].size()) };
         double row2 { static_cast<double>(matrix2.size()) };
+        double col1 { static_cast<double>(matrix1[0].size()) };
         double col2 { static_cast<double>(matrix2[0].size()) };
         if (row2 == col1) {
             Matrix M(row1, std::vector<double>(col2));
@@ -126,19 +130,21 @@ Matrix sum(const Matrix& matrix1, const Matrix& matrix2)
         return M;
     } else {
         double row1 { static_cast<double>(matrix1.size()) };
-        double col1 { static_cast<double>(matrix1[0].size()) };
         double row2 { static_cast<double>(matrix2.size()) };
-        double col2 { static_cast<double>(matrix2[0].size()) };
-        if (row1 == row2 && col1 == col2) {
-            Matrix M(row1, std::vector<double>(col1));
-            for (size_t i {}; i < row1; i++) {
-                for (size_t j {}; j < col1; j++)
-                    M[i][j] = (matrix1[i][j] + matrix2[i][j]);
-            }
-            return M;
-        } else {
+        if (row1 == row2) {
+            double col1 { static_cast<double>(matrix1[0].size()) };
+            double col2 { static_cast<double>(matrix2[0].size()) };
+            if (col1 == col2) {
+                Matrix M(row1, std::vector<double>(col1));
+                for (size_t i {}; i < row1; i++) {
+                    for (size_t j {}; j < col1; j++)
+                        M[i][j] = (matrix1[i][j] + matrix2[i][j]);
+                }
+                return M;
+            } else
+                throw std::logic_error("Matrices sizes don't match");
+        } else
             throw std::logic_error("Matrices sizes don't match");
-        }
     }
 }
 
