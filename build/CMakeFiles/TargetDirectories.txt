@@ -1,0 +1,3 @@
+/mnt/f/AUT/Term 6/AP/HW1/build/CMakeFiles/rebuild_cache.dir
+/mnt/f/AUT/Term 6/AP/HW1/build/CMakeFiles/edit_cache.dir
+/mnt/f/AUT/Term 6/AP/HW1/build/CMakeFiles/main.dir

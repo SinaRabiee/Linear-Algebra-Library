@@ -1,11 +1,11 @@
+
+#include "hw1.h"
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "hw1.h"
-
 int main(int argc, char** argv)
 {
-    
+
     if (true) // make false to run unit-tests
     {
         // debug section
