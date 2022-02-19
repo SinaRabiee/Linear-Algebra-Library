@@ -46,8 +46,8 @@ void show(const Matrix& matrix)
     if (matrix.empty()) {
         throw std::logic_error("Matrix is empty");
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         for (size_t i {}; i < row; i++) {
             for (size_t j {}; j < col; j++)
                 std::cout << std::setprecision(3) << std::fixed << std::setw(7) << matrix[i][j];
@@ -62,8 +62,8 @@ Matrix multiply(const Matrix& matrix, double c)
         Matrix M {};
         return M;
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         Matrix M(row, std::vector<double>(col));
         M = matrix;
         for (size_t i {}; i < row; i++) {
@@ -85,12 +85,12 @@ Matrix multiply(const Matrix& matrix1, const Matrix& matrix2)
     else if (matrix1.empty() && !matrix2.empty())
         throw std::logic_error("Matrix1 is empty and the other one is not");
     else {
-        double row1 { static_cast<double>(matrix1.size()) };
-        double row2 { static_cast<double>(matrix2.size()) };
-        double col1 { static_cast<double>(matrix1[0].size()) };
-        double col2 { static_cast<double>(matrix2[0].size()) };
+        size_t row1 { matrix1.size() };
+        size_t row2 { matrix2.size() };
+        size_t col1 { matrix1[0].size() };
+        size_t col2 { matrix2[0].size() };
         if (row2 == col1) {
-            Matrix M(row1, std::vector<double>(col2));
+            Matrix M((row1), std::vector<double>(col2));
             for (size_t i {}; i < row1; i++) {
                 for (size_t j {}; j < col2; j++) {
                     for (size_t k {}; k < col1; k++)
@@ -110,8 +110,8 @@ Matrix sum(const Matrix& matrix, double c)
         Matrix M {};
         return M;
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         Matrix M(row, std::vector<double>(col));
         for (size_t i {}; i < row; i++) {
             for (size_t j {}; j < col; j++)
@@ -127,11 +127,11 @@ Matrix sum(const Matrix& matrix1, const Matrix& matrix2)
         Matrix M {};
         return M;
     } else {
-        double row1 { static_cast<double>(matrix1.size()) };
-        double row2 { static_cast<double>(matrix2.size()) };
+        size_t row1 { matrix1.size() };
+        size_t row2 { matrix2.size() };
         if (row1 == row2) {
-            double col1 { static_cast<double>(matrix1[0].size()) };
-            double col2 { static_cast<double>(matrix2[0].size()) };
+            size_t col1 { matrix1[0].size() };
+            size_t col2 { matrix2[0].size() };
             if (col1 == col2) {
                 Matrix M(row1, std::vector<double>(col1));
                 for (size_t i {}; i < row1; i++) {
@@ -152,8 +152,8 @@ Matrix transpose(const Matrix& matrix)
         Matrix M {};
         return M;
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         Matrix M(col, std::vector<double>(row));
         for (size_t i {}; i < row; i++) {
             for (size_t j {}; j < col; j++)
@@ -168,11 +168,11 @@ Matrix minor(const Matrix& matrix, size_t n, size_t m)
     if (matrix.empty()) {
         throw std::logic_error("Matrix is empty");
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         if (n < row && m < col) {
-            double minor_row {};
-            double minor_col {};
+            size_t minor_row {};
+            size_t minor_col {};
             Matrix temp(row, std::vector<double>(col));
             Matrix M(row - 1, std::vector<double>(col - 1));
 
@@ -200,12 +200,11 @@ Matrix minor(const Matrix& matrix, size_t n, size_t m)
 
 double determinant(const Matrix& matrix)
 {
-
     if (matrix.empty())
         return 1.0;
     else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         double det {};
         if (row == col) {
             if (row == 1)
@@ -228,8 +227,8 @@ Matrix inverse(const Matrix& matrix)
         Matrix M {};
         return M;
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         if (row == col) {
             if (determinant(matrix) == 0)
                 throw std::logic_error("Matrix is singular (Determinant = 0)");
@@ -257,10 +256,10 @@ Matrix concatenate(const Matrix& matrix1, const Matrix& matrix2, int axis)
         } else
             throw std::logic_error("An empty matrix is is not concatable with a non-empty matirix");
     } else {
-        double row1 { static_cast<double>(matrix1.size()) };
-        double col1 { static_cast<double>(matrix1[0].size()) };
-        double row2 { static_cast<double>(matrix2.size()) };
-        double col2 { static_cast<double>(matrix2[0].size()) };
+        size_t row1 { matrix1.size() };
+        size_t row2 { matrix2.size() };
+        size_t col1 { matrix1[0].size() };
+        size_t col2 { matrix2[0].size() };
 
         if (axis == 0) {
             if (col1 != col2) {
@@ -303,8 +302,8 @@ Matrix ero_swap(const Matrix& matrix, size_t r1, size_t r2)
     if (matrix.empty()) {
         throw std::logic_error("Matrix is empty");
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         if (r1 < row && r2 < row) {
             Matrix temp(1, std::vector<double>(col));
             Matrix M { matrix };
@@ -324,8 +323,8 @@ Matrix ero_multiply(const Matrix& matrix, size_t r, double c)
     if (matrix.empty()) {
         throw std::logic_error("Matrix is empty");
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         if (r < row) {
             Matrix M { matrix };
             for (size_t j {}; j < col; j++)
@@ -341,10 +340,10 @@ Matrix ero_sum(const Matrix& matrix, size_t r1, double c, size_t r2)
     if (matrix.empty()) {
         throw std::logic_error("Matrix is empty");
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         if (r1 < row && r2 < row) {
-            Matrix temp(1, std::vector<double>(col));
+            Matrix temp(1.0, std::vector<double>(col));
             Matrix M { matrix };
             for (size_t j {}; j < col; j++)
                 M[r2][j] += c * matrix[r1][j];
@@ -356,22 +355,21 @@ Matrix ero_sum(const Matrix& matrix, size_t r1, double c, size_t r2)
 
 Matrix upper_triangular(const Matrix& matrix)
 {
-
     if (matrix.empty()) {
         Matrix M {};
         return M;
     } else {
-        double row { static_cast<double>(matrix.size()) };
-        double col { static_cast<double>(matrix[0].size()) };
+        size_t row { matrix.size() };
+        size_t col { matrix[0].size() };
         if (row == col) {
-            double temp {};
+            double coef {};
             Matrix M { matrix };
             for (size_t i {}; i < row; i++) {
                 if (M[i][i] == 0)
                     M = algebra::ero_swap(M, i, i + 1);
                 for (size_t k { i + 1 }; k < row; k++) {
-                    temp = -(M[k][i] / M[i][i]);
-                    M = algebra::ero_sum(M, i, temp, k);
+                    coef = -(M[k][i] / M[i][i]);
+                    M = algebra::ero_sum(M, i, coef, k);
                 }
             }
             return M;
