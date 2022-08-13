@@ -11,7 +11,7 @@ Creats a `n x m` matrix of ones
 ```cpp
 Matrix ones(size_t n, size_t m)
 ```
-##random
+## random
 Produces a `n x m` matrix of random numbers ranging from `min` to `max`
 ```cpp
 Matrix random(size_t n, size_t m, double min, double max)
@@ -26,7 +26,7 @@ Multiplies all the elements of `matrix1` with scalar number `c`
 ```cpp
 Matrix multiply(const Matrix& matrix, double c)
 ```
-## mutiply (2 matrices)
+## mutiply (two matrices)
 Multiplies `matrix1` with `matrix2` in that order
 ```cpp
 Matrix multiply(const Matrix& matrix1, const Matrix& matrix2)
@@ -36,7 +36,7 @@ Addes scalar number `c` to all the elements of `matrix1`
 ```cpp
 Matrix sum(const Matrix& matrix, double c)
 ```
-## sum (2 matrices)
+## sum (two matrices)
 Addes `matrix1` to `matrix2`
 ```cpp
 Matrix sum(const Matrix& matrix1, const Matrix& matrix2)
