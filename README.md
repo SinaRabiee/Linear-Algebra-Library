@@ -1,4 +1,4 @@
-# AP HW1 (Linear algebra library in C++)
+# Linear algebra library in C++
 In this project, we implement different functions for working with vectors and matrices.
 
 ## zeros 
